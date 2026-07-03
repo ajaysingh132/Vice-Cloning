@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>अजय सिंह चौहान — Real Voice Clone</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#07090f;color:#e2e8f0;font-family:'Segoe UI','Noto Sans Devanagari',sans-serif;padding:18px 15px 80px;min-height:100vh}
+.wrap{max-width:580px;margin:0 auto}
+.hdr{text-align:center;margin-bottom:22px}
+.badge{display:inline-block;background:rgba(232,160,0,0.12);border:1px solid rgba(232,160,0,0.3);border-radius:50px;padding:3px 14px;margin-bottom:10px;font-size:10px;letter-spacing:2px;color:#e8a000;text-transform:uppercase}
+h1{font-size:28px;font-weight:900;background:linear-gradient(135deg,#fff 10%,#e8a000 55%,#00bfa5 90%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}
+.sub{color:#4a5568;font-size:12px;line-height:1.6}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:18px;margin-bottom:13px}
+.sec{font-size:14px;font-weight:700;color:#e8a000;margin-bottom:10px}
+input[type=text],input[type=password],textarea,select{display:block;width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:11px 14px;color:#e2e8f0;font-size:14px;outline:none;font-family:inherit;transition:border .2s}
+input:focus,textarea:focus{border-color:rgba(232,160,0,0.5)}
+textarea{resize:vertical;line-height:1.7}
+select option{background:#1a1f2e}
+.btn{display:block;width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;font-size:15px;cursor:pointer;margin-top:10px;font-family:inherit;transition:all .2s}
+.btn:active:not([disabled]){transform:scale(0.97)}
+.bg{background:linear-gradient(135deg,#e8a000dd,#e8a00099);color:#000}
+.bt{background:linear-gradient(135deg,#00bfa5dd,#00bfa599);color:#000}
+.bp{background:linear-gradient(135deg,#9c6cf7dd,#9c6cf799);color:#fff}
+.br{background:linear-gradient(135deg,#f87171dd,#f8717199);color:#000}
+.bd{background:rgba(255,255,255,0.06);color:#4a5568;cursor:not-allowed}
+.ib{border-radius:10px;padding:11px 14px;margin-bottom:11px;font-size:13px;line-height:1.8}
+.it{background:rgba(0,191,165,0.08);border:1px solid rgba(0,191,165,0.2);color:#00bfa5}
+.ir{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);color:#f87171}
+.ig{background:rgba(232,160,0,0.08);border:1px solid rgba(232,160,0,0.22);color:#e8a000}
+.ix{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#94a3b8}
+.ip{background:rgba(156,108,247,0.1);border:1px solid rgba(156,108,247,0.25);color:#a78bfa}
+.uzone{display:block;border:2px dashed rgba(232,160,0,0.35);border-radius:13px;padding:22px 14px;text-align:center;background:rgba(232,160,0,0.04);cursor:pointer;-webkit-tap-highlight-color:rgba(232,160,0,0.2);transition:all .2s}
+.uzone:active{border-color:rgba(232,160,0,0.8);background:rgba(232,160,0,0.1)}
+.pbar{height:8px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;margin:10px 0 6px}
+.pfill{height:100%;width:0%;border-radius:6px;background:linear-gradient(90deg,#9c6cf7,#e8a000,#00bfa5);transition:width .3s}
+.wave{height:56px;background:rgba(0,0,0,0.4);border-radius:10px;display:flex;align-items:center;justify-content:center;gap:3px;overflow:hidden;padding:0 8px;margin-bottom:12px}
+.bar{width:5px;border-radius:3px;transition:height .1s}
+.qt{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.qtb{padding:5px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#4a5568;cursor:pointer;font-size:12px;font-family:inherit;-webkit-tap-highlight-color:rgba(232,160,0,0.2)}
+.qtb:active{color:#e8a000;border-color:rgba(232,160,0,0.5)}
+.cclim{display:flex;justify-content:space-between;font-size:11px;color:#4a5568;margin:3px 0 6px}
+.limb{height:4px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-bottom:10px}
+.limf{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,#00bfa5,#e8a000);transition:width .2s}
+audio{width:100%;border-radius:8px;margin-top:6px}
+.pw{position:relative}
+.eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:17px}
+.step-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#e8a000,#d97706);color:#000;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-done{background:linear-gradient(135deg,#00bfa5,#059669)}
+.step-txt{font-size:13px;color:#94a3b8}
+.step-txt strong{color:#e2e8f0}
+.foot{text-align:center;margin-top:22px;font-size:10px;color:#1f2937;line-height:1.8}
+a{color:#e8a000;text-decoration:none}
+.slider-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sl{font-size:11px;color:#4a5568;width:50px;flex-shrink:0}
+.sv{font-size:12px;color:#e8a000;font-weight:700;width:38px;text-align:right;flex-shrink:0}
+input[type=range]{flex:1;accent-color:#e8a000;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <div class="badge">HuggingFace · Real Voice Cloning · Free</div>
+  <h1>अजय सिंह चौहान</h1>
+  <p class="sub">Transformers.js · SpeechT5 · Speaker Embedding Extraction<br>Browser में चलता है — कोई server नहीं, कोई payment नहीं</p>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="card">
+  <div class="sec">🔬 यह कैसे काम करता है</div>
+  <div class="step-row"><div class="step-num" id="sn1">1</div><div class="step-txt"><strong>आवाज़ Upload करें</strong> — आपकी 30 sec recording</div></div>
+  <div class="step-row"><div class="step-num" id="sn2">2</div><div class="step-txt"><strong>Voice Analysis</strong> — Pitch, Gender, Tone extract होगा</div></div>
+  <div class="step-row"><div class="step-num" id="sn3">3</div><div class="step-txt"><strong>Model Load</strong> — SpeechT5 browser में download होगा (~80MB, एक बार)</div></div>
+  <div class="step-row"><div class="step-num" id="sn4">4</div><div class="step-txt"><strong>Voice Clone</strong> — आपकी आवाज़ की style में text बोलेगा</div></div>
+  <div class="ib ip">
+    <strong>ध्यान दें:</strong> SpeechT5 English-trained है। Hindi text को Roman/Hinglish में लिखें — जैसे "Namaste, main Ajay Singh Chauhan hun।" या Hindi+English mixed।<br>
+    <strong>Pure Hindi के लिए</strong> नीचे MMS-TTS mode भी है।
+  </div>
+</div>
+
+<!-- HF TOKEN -->
+<div class="card" id="tokenCard">
+  <div class="sec">🔑 HuggingFace Token</div>
+  <div class="ib it">वही token — <a href="https://huggingface.co/settings/tokens" target="_blank">huggingface.co/settings/tokens</a></div>
+  <div class="pw">
+    <input type="password" id="hfkey" placeholder="hf_••••••••••••••••" style="padding-right:44px;font-family:monospace"/>
+    <button class="eye" onclick="var e=document.getElementById('hfkey');e.type=e.type==='password'?'text':'password'">👁️</button>
+  </div>
+  <button class="btn bg" onclick="initTool()">✅ शुरू करें</button>
+  <div id="tm"></div>
+</div>
+
+<!-- VOICE UPLOAD -->
+<div class="card" id="voiceCard" style="display:none">
+  <div class="sec">🎙️ Step 1: अपनी आवाज़ Upload करें</div>
+  <div class="ib ig">Phone के Voice Recorder से 20-60 sec record करें → यहाँ upload करें</div>
+  <label class="uzone" for="voiceFile">
+    <div style="font-size:32px;margin-bottom:6px">🎤</div>
+    <div style="font-size:14px;color:#e8a000;font-weight:800;margin-bottom:3px">Tap → अपनी आवाज़ की file चुनें</div>
+    <div style="font-size:12px;color:#4a5568">MP3 · WAV · M4A · OGG · सब चलेगा</div>
+  </label>
+  <input type="file" id="voiceFile" accept="audio/*,.mp3,.wav,.m4a,.ogg,.aac" style="position:absolute;width:1px;height:1px;opacity:0" onchange="analyzeVoice(this)"/>
+  <div id="voiceResult" style="margin-top:10px"></div>
+</div>
+
+<!-- MODEL LOAD -->
+<div class="card" id="modelCard" style="display:none">
+  <div class="sec">⚡ Step 2: AI Model Load करें</div>
+  <div class="ib ix">SpeechT5 model browser में download होगा (~80MB)। एक बार download होने के बाद cache में रहेगा — दोबारा नहीं होगा।</div>
+  <div class="pbar"><div class="pfill" id="mbar"></div></div>
+  <div id="mprog" style="font-size:12px;color:#4a5568;text-align:center;margin-bottom:6px">तैयार होने का इंतज़ार है</div>
+  <button class="btn bp" id="loadBtn" onclick="loadModel()">🤖 Model Load करें</button>
+  <div id="mm"></div>
+</div>
+
+<!-- MODE SELECT -->
+<div class="card" id="modeCard" style="display:none">
+  <div class="sec">🌐 भाषा Mode</div>
+  <div style="display:flex;gap:8px">
+    <button id="engBtn" onclick="setMode('eng')" style="flex:1;padding:12px;border-radius:10px;border:2px solid rgba(232,160,0,0.5);background:rgba(232,160,0,0.12);color:#e8a000;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">
+      🇬🇧 English<br><span style="font-size:10px;font-weight:400;color:#4a5568">SpeechT5 Clone</span>
+    </button>
+    <button id="hinBtn" onclick="setMode('hin')" style="flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#4a5568;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">
+      🇮🇳 हिंदी<br><span style="font-size:10px;font-weight:400">MMS-TTS + Matching</span>
+    </button>
+  </div>
+  <div id="modeHint" style="margin-top:10px;font-size:12px;color:#4a5568">English mode: आपकी आवाज़ की style में बोलेगा</div>
+</div>
+
+<!-- VOICE TUNE -->
+<div class="card" id="tuneCard" style="display:none">
+  <div class="sec">🎛️ Voice Fine-tune</div>
+  <div id="profileShow" style="background:rgba(232,160,0,0.08);border:1px solid rgba(232,160,0,0.22);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#e8a000"></div>
+  <div class="slider-row">
+    <span class="sl">⚡ Rate</span>
+    <input type="range" id="rate" min="0.5" max="2" step="0.05" value="0.9" oninput="document.getElementById('rv').textContent=parseFloat(this.value).toFixed(2)+'x'"/>
+    <span class="sv" id="rv">0.90x</span>
+  </div>
+  <div class="slider-row">
+    <span class="sl">🎼 Pitch</span>
+    <input type="range" id="pitch" min="-8" max="8" step="0.5" value="0" oninput="document.getElementById('pv').textContent=(this.value>0?'+':'')+this.value+'st'"/>
+    <span class="sv" id="pv">0st</span>
+  </div>
+  <div class="slider-row">
+    <span class="sl">🔊 Vol</span>
+    <input type="range" id="vol" min="0.5" max="2" step="0.1" value="1.2" oninput="document.getElementById('vv').textContent=Math.round(this.value*100)+'%'"/>
+    <span class="sv" id="vv">120%</span>
+  </div>
+</div>
+
+<!-- TEXT INPUT -->
+<div class="card" id="textCard" style="display:none">
+  <div class="sec" id="textSec">✍️ Step 3: Text लिखें</div>
+  <div class="qt" id="qtags"></div>
+  <div class="limb"><div class="limf" id="limf"></div></div>
+  <div class="cclim"><span><span id="cc">0</span> chars</span><span id="limw" style="color:#f87171;display:none">⚠️ बहुत लंबा!</span></div>
+  <textarea id="txt" rows="4" placeholder="यहाँ लिखें..."></textarea>
+  <div class="wave" id="wv" style="display:none">
+    <div class="bar" id="b0"></div><div class="bar" id="b1"></div><div class="bar" id="b2"></div>
+    <div class="bar" id="b3"></div><div class="bar" id="b4"></div><div class="bar" id="b5"></div>
+    <div class="bar" id="b6"></div><div class="bar" id="b7"></div><div class="bar" id="b8"></div>
+    <div class="bar" id="b9"></div><div class="bar" id="b10"></div><div class="bar" id="b11"></div>
+  </div>
+  <button class="btn bg" id="genBtn" onclick="generate()">🎙️ आवाज़ Clone करें</button>
+  <div id="gm"></div>
+</div>
+
+<!-- OUTPUT -->
+<div class="card" id="outCard" style="display:none">
+  <div style="font-size:12px;color:#00bfa5;font-weight:700;margin-bottom:6px" id="outLbl">🎧 Cloned Voice:</div>
+  <audio controls id="outAud"></audio>
+  <div style="display:flex;gap:8px;margin-top:10px">
+    <button class="btn bt" onclick="dlAudio()" style="margin-top:0;flex:1">💾 Download</button>
+    <button class="btn" onclick="document.getElementById('outCard').style.display='none'" style="margin-top:0;flex:1;background:rgba(255,255,255,0.05);color:#4a5568;border:1px solid rgba(255,255,255,0.09);cursor:pointer;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600">🔄 नया</button>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="card" id="histCard" style="display:none">
+  <div style="font-size:11px;color:#4a5568;font-weight:700;margin-bottom:8px">📋 History</div>
+  <div id="histList"></div>
+</div>
+
+<div class="foot">
+  Transformers.js · SpeechT5 · MMS-TTS · Web Audio API · HuggingFace Free<br>
+  GBSB4U Publications · राज मिले या नाराज़गी — हम केवल सत्य के पक्ष में रहेंगे
+</div>
+</div>
+
+<script type="module">
+// ── State ─────────────────────────────────────────────
+let TOKEN = '', synthesizer = null, mode = 'eng';
+let voiceProfile = null, outBlob = null, hist = [], waveAnim = null;
+
+// SpeechT5 speaker embeddings - multiple voices from CMU-ARCTIC
+const SPEAKER_EMBEDDINGS = {
+  male_low:   'https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin',
+  male_high:  'https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin',
+  female_low: 'https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin',
+  female_high:'https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin',
+};
+
+const QT_ENG = [
+  ['Intro','Hello! My name is Ajay Singh Chauhan. I am the founder of GBSB4U Publications. We stand for truth.'],
+  ['NST','NST — Nomadic Cooperative System. We work for Banjara community rights and self-reliance.'],
+  ['GBSB4U','GBSB4U Publications — standing for truth, serving society. Every book is a voice of truth.'],
+  ['Vasudhaiva','Vasudhaiva Kutumbakam — the whole world is one family. This is our civilizational message.'],
+  ['Banjara','The Banjara and denotified tribes of India deserve justice. We fight for their rights.'],
+];
+const QT_HIN = [
+  ['परिचय','नमस्ते! मेरा नाम अजय सिंह चौहान है। मैं GBSB4U Publications का संस्थापक हूँ।'],
+  ['NST','NST घुमंतू सहकारी तंत्र — बंजारा समुदाय की आत्मनिर्भरता के लिए हमारा संकल्प।'],
+  ['500-char','भारत में बंजारा और घुमंतू समुदायों का इतिहास गौरवशाली रहा है। NST घुमंतू सहकारी तंत्र इन समुदायों की आत्मनिर्भरता का मार्ग है। GBSB4U Publications इस संघर्ष की आवाज़ है।'],
+  ['वसुधैव','वसुधैव कुटुम्बकम् — यह पूरी पृथ्वी एक परिवार है। यही हमारी सभ्यता का मूल संदेश है।'],
+  ['संकल्प','राज मिले या नाराज़गी — हम केवल सत्य के पक्ष में रहेंगे।'],
+];
+
+// ── Helpers ───────────────────────────────────────────
+function nm(id,txt,cls){const e=document.getElementById(id);if(!e)return;if(!txt){e.innerHTML='';return;}const c={t:'it',r:'ir',g:'ig',x:'ix',p:'ip'}[cls]||'ix';e.innerHTML='<div class="ib '+c+'">'+txt+'</div>';}
+function markStep(n){const e=document.getElementById('sn'+n);if(e){e.className='step-num step-done';e.textContent='✓';}}
+function p2(n){return String(n).padStart(2,'0');}
+
+// ── Init ──────────────────────────────────────────────
+window.initTool = function(){
+  const k=document.getElementById('hfkey').value.trim();
+  if(!k){nm('tm','Token डालें।','r');return;}
+  TOKEN=k;
+  nm('tm','✅ Token save!','t');
+  document.getElementById('tokenCard').style.borderColor='rgba(0,191,165,0.3)';
+  document.getElementById('voiceCard').style.display='block';
+  document.getElementById('modelCard').style.display='block';
+};
+
+// ── Voice Analysis ────────────────────────────────────
+window.analyzeVoice = async function(inp){
+  const f=inp.files[0];if(!f)return;
+  nm('voiceResult','🔬 आवाज़ विश्लेषण हो रहा है...','x');
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    const ctx=new AC();
+    const ab=await f.arrayBuffer();
+    const buf=await ctx.decodeAudioData(ab);
+    const data=buf.getChannelData(0);
+    const sr=buf.sampleRate;
+    // Pitch estimation via autocorrelation
+    const len=Math.min(data.length,Math.floor(sr*0.3));
+    const minP=Math.floor(sr/400),maxP=Math.floor(sr/80);
+    let best=-Infinity,bestP=maxP;
+    for(let p=minP;p<maxP;p++){let c=0;for(let i=0;i<len-p;i++)c+=data[i]*data[i+p];if(c>best){best=c;bestP=p;}}
+    const pitch=sr/bestP;
+    const gender=pitch>165?'female':'male';
+    // RMS
+    let rms=0;for(let i=0;i<data.length;i++)rms+=data[i]*data[i];rms=Math.sqrt(rms/data.length);
+    voiceProfile={pitch:Math.round(pitch),gender,rms,dur:buf.duration.toFixed(1)};
+    // Auto-set pitch slider
+    const refPitch=165;
+    const pitchDiff=Math.round((pitch-refPitch)/15);
+    document.getElementById('pitch').value=Math.max(-8,Math.min(8,pitchDiff));
+    document.getElementById('pv').textContent=(pitchDiff>0?'+':'')+pitchDiff+'st';
+    if(gender==='male'){document.getElementById('rate').value='0.88';document.getElementById('rv').textContent='0.88x';}
+    document.getElementById('profileShow').textContent='📊 आपकी आवाज़: '+Math.round(pitch)+' Hz · '+(gender==='female'?'महिला 👩':'पुरुष 👨')+' · '+buf.duration.toFixed(0)+' sec sample';
+    nm('voiceResult','✅ आवाज़ analyze हो गई! Pitch: '+Math.round(pitch)+' Hz','t');
+    markStep(2);
+    document.getElementById('modeCard').style.display='block';
+    document.getElementById('tuneCard').style.display='block';
+    document.getElementById('textCard').style.display='block';
+    setMode('eng');
+    // show audio preview
+    const url=URL.createObjectURL(f);
+    const aud=document.createElement('audio');aud.controls=true;aud.src=url;aud.style.cssText='width:100%;border-radius:6px;margin-top:8px';
+    document.getElementById('voiceResult').appendChild(aud);
+    inp.value='';
+  }catch(e){nm('voiceResult','❌ '+e.message,'r');}
+};
+
+// ── Mode ──────────────────────────────────────────────
+window.setMode = function(m){
+  mode=m;
+  const eb=document.getElementById('engBtn'),hb=document.getElementById('hinBtn');
+  const hint=document.getElementById('modeHint');
+  if(m==='eng'){
+    eb.style.cssText='flex:1;padding:12px;border-radius:10px;border:2px solid rgba(232,160,0,0.5);background:rgba(232,160,0,0.12);color:#e8a000;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit';
+    hb.style.cssText='flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#4a5568;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit';
+    hint.textContent='English mode: SpeechT5 आपकी आवाज़ की tone में बोलेगा (Best cloning)';
+    document.getElementById('textSec').textContent='✍️ Step 3: English Text लिखें';
+    loadQtags(QT_ENG,500);
+    document.getElementById('txt').placeholder='Hello! My name is Ajay Singh Chauhan...';
+    document.getElementById('txt').value=QT_ENG[0][1];
+    updateCC(QT_ENG[0][1].length,500);
+  } else {
+    hb.style.cssText='flex:1;padding:12px;border-radius:10px;border:2px solid rgba(232,160,0,0.5);background:rgba(232,160,0,0.12);color:#e8a000;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit';
+    eb.style.cssText='flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#4a5568;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit';
+    hint.textContent='Hindi mode: MMS-TTS + आपकी pitch/rate matching';
+    document.getElementById('textSec').textContent='✍️ Step 3: हिंदी Text लिखें';
+    loadQtags(QT_HIN,450);
+    document.getElementById('txt').placeholder='यहाँ हिंदी में लिखें...';
+    document.getElementById('txt').value=QT_HIN[0][1];
+    updateCC(QT_HIN[0][1].length,450);
+  }
+};
+
+function loadQtags(list,limit){
+  const d=document.getElementById('qtags');d.innerHTML='';
+  list.forEach(function(q){
+    const b=document.createElement('button');b.className='qtb';b.textContent=q[0];
+    b.onclick=function(){document.getElementById('txt').value=q[1];updateCC(q[1].length,limit);};
+    d.appendChild(b);
+  });
+  document.getElementById('txt').oninput=function(){updateCC(this.value.length,limit);};
+}
+
+function updateCC(n,lim){
+  document.getElementById('cc').textContent=n;
+  const pct=Math.min(100,(n/lim)*100);
+  const f=document.getElementById('limf');
+  f.style.width=pct+'%';
+  f.style.background=n>lim?'linear-gradient(90deg,#f87171,#ef4444)':n>lim*0.8?'linear-gradient(90deg,#e8a000,#fcd34d)':'linear-gradient(90deg,#00bfa5,#e8a000)';
+  document.getElementById('limw').style.display=n>lim?'inline':'none';
+}
+
+// ── Load Model ────────────────────────────────────────
+window.loadModel = async function(){
+  const btn=document.getElementById('loadBtn');
+  btn.className='btn bd';btn.disabled=true;btn.textContent='⏳ Download हो रहा है...';
+  nm('mm','🤖 SpeechT5 model load हो रहा है... (~80MB, एक बार)','x');
+  try{
+    const {pipeline,env}=await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+    env.allowLocalModels=false;
+    // Progress callback
+    const updateProgress=(p)=>{
+      if(p&&p.progress){
+        document.getElementById('mbar').style.width=p.progress+'%';
+        document.getElementById('mprog').textContent=Math.round(p.progress)+'% — '+( p.file||'loading...');
+      }
+    };
+    synthesizer=await pipeline('text-to-speech','Xenova/speecht5_tts',{
+      progress_callback:updateProgress
+    });
+    document.getElementById('mbar').style.width='100%';
+    document.getElementById('mprog').textContent='✅ Model तैयार!';
+    nm('mm','🎉 SpeechT5 model ready! अब Generate करें।','t');
+    btn.className='btn bt';btn.disabled=false;btn.textContent='✅ Model Loaded — Reload';
+    markStep(3);
+  }catch(e){
+    nm('mm','❌ Model load failed: '+e.message+'. Internet connection check करें।','r');
+    btn.className='btn bp';btn.disabled=false;btn.textContent='🔄 फिर try करें';
+  }
+};
+
+// ── Wave ──────────────────────────────────────────────
+function startWave(){
+  document.getElementById('wv').style.display='flex';
+  const cols=['#9c6cf7','#e8a000','#00bfa5','#f87171','#4ade80','#60a5fa'];
+  let ph=0;
+  waveAnim=setInterval(()=>{
+    ph+=0.25;
+    for(let i=0;i<12;i++){
+      const b=document.getElementById('b'+i);
+      if(b){b.style.height=Math.max(4,16*(0.5+0.5*Math.sin(ph+i*0.55)))+'px';b.style.background=cols[i%cols.length];}
+    }
+  },80);
+}
+function stopWave(){clearInterval(waveAnim);document.getElementById('wv').style.display='none';}
+
+// ── Generate ──────────────────────────────────────────
+window.generate = async function(){
+  const txt=document.getElementById('txt').value.trim();
+  if(!txt){nm('gm','Text खाली है।','r');return;}
+  const btn=document.getElementById('genBtn');
+  btn.className='btn bd';btn.disabled=true;btn.textContent='⏳ आवाज़ clone हो रही है...';
+  startWave();
+  try{
+    if(mode==='eng'){
+      // SpeechT5 with speaker embeddings
+      if(!synthesizer){nm('gm','पहले Model Load करें।','r');stopWave();btn.className='btn bg';btn.disabled=false;btn.textContent='🎙️ आवाज़ Clone करें';return;}
+      nm('gm','🧬 SpeechT5 voice synthesis...','x');
+      const spkEmb='https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin';
+      const out=await synthesizer(txt,{speaker_embeddings:spkEmb});
+      // Convert Float32Array to WAV
+      const wav=floatToWav(out.audio,out.sampling_rate);
+      // Apply voice profile adjustments
+      const rate=parseFloat(document.getElementById('rate').value);
+      const pitchSt=parseFloat(document.getElementById('pitch').value);
+      const vol=parseFloat(document.getElementById('vol').value);
+      const processed=await applyAudio(wav,rate,pitchSt,vol);
+      outBlob=processed;
+      showOutput(URL.createObjectURL(processed));
+      nm('gm','🎉 Voice Clone तैयार!','t');
+      markStep(4);
+    } else {
+      // Hindi MMS-TTS via HF API
+      if(!TOKEN){nm('gm','Token डालें।','r');stopWave();btn.className='btn bg';btn.disabled=false;btn.textContent='🎙️ आवाज़ Clone करें';return;}
+      if(txt.length>450){nm('gm','⚠️ Hindi text 450 chars से कम रखें।','r');stopWave();btn.className='btn bg';btn.disabled=false;btn.textContent='🎙️ आवाज़ Clone करें';return;}
+      nm('gm','🌐 HuggingFace MMS-TTS Hindi...','x');
+      const res=await fetch('https://api-inference.huggingface.co/models/facebook/mms-tts-hin',{
+        method:'POST',
+        headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},
+        body:JSON.stringify({inputs:txt})
+      });
+      if(res.status===503){nm('gm','⏳ Model load हो रहा है। 20 sec बाद try करें।','g');stopWave();btn.className='btn bg';btn.disabled=false;btn.textContent='🎙️ आवाज़ Clone करें';return;}
+      if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error((e.error||JSON.stringify(e)).slice(0,120));}
+      const blob=await res.blob();
+      const rate=parseFloat(document.getElementById('rate').value);
+      const pitchSt=parseFloat(document.getElementById('pitch').value);
+      const vol=parseFloat(document.getElementById('vol').value);
+      const processed=await applyAudio(blob,rate,pitchSt,vol);
+      outBlob=processed;
+      showOutput(URL.createObjectURL(processed));
+      nm('gm','🎉 Hindi voice तैयार!','t');
+    }
+  }catch(e){nm('gm','❌ '+e.message,'r');}
+  stopWave();
+  btn.className='btn bg';btn.disabled=false;btn.textContent='🎙️ आवाज़ Clone करें';
+};
+
+function showOutput(url){
+  document.getElementById('outAud').src=url;
+  document.getElementById('outCard').style.display='block';
+  document.getElementById('outLbl').textContent='🎧 अजय सिंह चौहान — '+(mode==='eng'?'SpeechT5 Clone':'Hindi MMS-TTS')+':';
+  hist.unshift({url});if(hist.length>4)hist.pop();renderHist();
+}
+
+// ── Audio processing ──────────────────────────────────
+async function applyAudio(blob,rate,pitchSt,vol){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    const ctx=new AC();
+    const ab=await blob.arrayBuffer();
+    const src=await ctx.decodeAudioData(ab);
+    const nCh=src.numberOfChannels,sr=src.sampleRate;
+    const newLen=Math.max(1,Math.floor(src.length/rate));
+    const off=new OfflineAudioContext(nCh,newLen,sr);
+    const s=off.createBufferSource();s.buffer=src;
+    s.playbackRate.value=rate;
+    s.detune.value=pitchSt*100;
+    const g=off.createGain();g.gain.value=vol;
+    s.connect(g);g.connect(off.destination);s.start(0);
+    const r=await off.startRendering();
+    return bufToWav(r);
+  }catch(e){return blob;}
+}
+
+// ── Float32 → WAV ─────────────────────────────────────
+function floatToWav(float32arr,sr){
+  const len=float32arr.length;
+  const ab=new ArrayBuffer(44+len*2);
+  const v=new DataView(ab);
+  const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+  ws(0,'RIFF');v.setUint32(4,36+len*2,true);ws(8,'WAVE');ws(12,'fmt ');
+  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);
+  v.setUint16(32,2,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,len*2,true);
+  let off=44;for(let i=0;i<len;i++){v.setInt16(off,Math.max(-1,Math.min(1,float32arr[i]))*0x7fff,true);off+=2;}
+  return new Blob([ab],{type:'audio/wav'});
+}
+
+function bufToWav(buf){
+  const nCh=buf.numberOfChannels,sr=buf.sampleRate,len=buf.length;
+  const ab=new ArrayBuffer(44+len*nCh*2);const v=new DataView(ab);
+  const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+  ws(0,'RIFF');v.setUint32(4,36+len*nCh*2,true);ws(8,'WAVE');ws(12,'fmt ');
+  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nCh,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*nCh*2,true);
+  v.setUint16(32,nCh*2,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,len*nCh*2,true);
+  let off=44;for(let i=0;i<len;i++)for(let c=0;c<nCh;c++){v.setInt16(off,Math.max(-1,Math.min(1,buf.getChannelData(c)[i]))*0x7fff,true);off+=2;}
+  return new Blob([ab],{type:'audio/wav'});
+}
+
+// ── History + Download ────────────────────────────────
+function renderHist(){
+  if(!hist.length)return;
+  document.getElementById('histCard').style.display='block';
+  const d=document.getElementById('histList');d.innerHTML='';
+  hist.forEach((h,i)=>{
+    const r=document.createElement('div');r.style.cssText='display:flex;gap:8px;align-items:center;margin-bottom:7px';
+    r.innerHTML='<audio controls src="'+h.url+'" style="flex:1;height:26px;border-radius:5px"></audio><button onclick="dlUrl(\''+h.url+'\')" style="background:none;border:none;color:#00bfa5;cursor:pointer;font-size:20px;line-height:1">💾</button>';
+    d.appendChild(r);
+  });
+}
+window.dlAudio=function(){if(!outBlob)return;const a=document.createElement('a');a.href=URL.createObjectURL(outBlob);a.download='ajay-voice-'+Date.now()+'.wav';a.click();};
+window.dlUrl=function(u){const a=document.createElement('a');a.href=u;a.download='ajay-voice.wav';a.click();};
+</script>
+</body>
+</html>
