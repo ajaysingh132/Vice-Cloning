@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>GBSBFORYOU AI Voice Engine V2</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;padding:16px;
+  background:#07090f;color:#e8edf5;
+  font-family:system-ui,"Noto Sans Devanagari",sans-serif;
+}
+.app{max-width:620px;margin:auto}
+header{text-align:center;margin:10px 0 22px}
+.badge{
+  display:inline-block;padding:5px 12px;border-radius:20px;
+  background:#e8a00018;border:1px solid #e8a00055;
+  color:#e8a000;font-size:11px
+}
+h1{margin:10px 0 4px;font-size:27px}
+.sub{color:#94a3b8;font-size:12px;line-height:1.6}
+
+.card{
+  background:#ffffff08;
+  border:1px solid #ffffff14;
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:14px;
+}
+.title{
+  color:#e8a000;
+  font-weight:800;
+  font-size:14px;
+  margin-bottom:12px;
+}
+label{font-size:12px;color:#94a3b8}
+textarea,select,input[type=text]{
+  width:100%;
+  margin-top:7px;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ffffff18;
+  background:#ffffff09;
+  color:#fff;
+  font:inherit;
+}
+textarea{min-height:170px;resize:vertical;line-height:1.7}
+select option{background:#151922}
+
+button{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:11px;
+  margin-top:9px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+}
+.primary{background:#e8a000;color:#111}
+.green{background:#00bfa5;color:#06110f}
+.purple{background:#8b5cf6;color:#fff}
+.dark{background:#ffffff0d;color:#cbd5e1;border:1px solid #ffffff14}
+
+.drop{
+  border:2px dashed #e8a00055;
+  padding:22px 10px;
+  border-radius:13px;
+  text-align:center;
+  color:#e8a000;
+  cursor:pointer;
+}
+.drop small{display:block;color:#64748b;margin-top:5px}
+
+.status{
+  padding:10px 12px;
+  border-radius:9px;
+  background:#00bfa512;
+  color:#00bfa5;
+  font-size:12px;
+  line-height:1.6;
+  margin-top:10px;
+}
+.warning{
+  background:#e8a00012;
+  color:#e8a000;
+}
+.error{
+  background:#ef444415;
+  color:#f87171;
+}
+audio{width:100%;margin-top:12px}
+
+.row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.row>*{flex:1}
+
+.range{
+  display:grid;
+  grid-template-columns:70px 1fr 48px;
+  align-items:center;
+  gap:8px;
+  margin:11px 0;
+  font-size:12px;
+  color:#94a3b8;
+}
+.range output{text-align:right;color:#e8a000}
+
+progress{
+  width:100%;
+  height:8px;
+  margin-top:8px;
+}
+
+.profile{
+  display:none;
+  margin-top:10px;
+  padding:10px;
+  border-radius:9px;
+  background:#ffffff08;
+  font-size:12px;
+  color:#cbd5e1;
+}
+
+.footer{
+  text-align:center;
+  color:#475569;
+  font-size:10px;
+  line-height:1.7;
+  padding:15px;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="badge">GBSBFORYOU · AI VOICE ENGINE V2</div>
+  <h1>🎙️ AI Voice Studio</h1>
+  <div class="sub">
+    Browser AI · Mobile First · No API Token<br>
+    SpeechT5 + Transformers.js
+  </div>
+</header>
+
+<!-- MODEL -->
+<section class="card">
+  <div class="title">🤖 1. AI Engine</div>
+
+  <div id="modelStatus" class="status warning">
+    AI model अभी load नहीं हुआ है।
+  </div>
+
+  <progress id="progress" value="0" max="100"></progress>
+
+  <button class="primary" id="loadBtn" onclick="loadEngine()">
+    🚀 AI Engine शुरू करें
+  </button>
+</section>
+
+
+<!-- VOICE PROFILE -->
+<section class="card">
+  <div class="title">🎙️ 2. Voice Profile</div>
+
+  <div class="drop" onclick="document.getElementById('voiceFile').click()">
+    🎤 अपनी आवाज़ की recording चुनें
+    <small>20–60 सेकंड · WAV / MP3 / M4A / OGG</small>
+  </div>
+
+  <input
+    id="voiceFile"
+    type="file"
+    accept="audio/*"
+    style="display:none"
+    onchange="saveVoiceProfile(this)"
+  >
+
+  <div id="profile" class="profile"></div>
+
+  <button class="dark" onclick="clearProfile()">
+    🗑️ Voice Profile हटाएँ
+  </button>
+
+  <div class="status warning">
+    वर्तमान V2 recording को local browser में profile के रूप में रखता है।
+    वास्तविक speaker-embedding extraction V2.1 में जोड़ा जाएगा।
+  </div>
+</section>
+
+
+<!-- LANGUAGE -->
+<section class="card">
+  <div class="title">🌐 3. Language Engine</div>
+
+  <select id="language" onchange="languageChanged()">
+    <option value="en">🇬🇧 English — SpeechT5</option>
+    <option value="hi">🇮🇳 हिन्दी — Text preparation mode</option>
+    <option value="sa">🕉️ संस्कृत — Text preparation mode</option>
+    <option value="gb">🟠 गोर बोली — Text preparation mode</option>
+  </select>
+
+  <div id="languageInfo" class="status">
+    English mode: SpeechT5 TTS सक्रिय है।
+  </div>
+</section>
+
+
+<!-- SCRIPT -->
+<section class="card">
+  <div class="title">📝 4. Voice Script</div>
+
+  <label>जो बोलना है वह यहाँ लिखें</label>
+
+  <textarea
+    id="script"
+    maxlength="5000"
+    placeholder="Hello, welcome to GBSBFORYOU AI Voice Engine."
+  ></textarea>
+
+  <div style="text-align:right;color:#64748b;font-size:10px">
+    <span id="count">0</span>/5000
+  </div>
+
+  <button class="dark" onclick="insertExample()">
+    ✨ उदाहरण डालें
+  </button>
+</section>
+
+
+<!-- CONTROLS -->
+<section class="card">
+  <div class="title">🎚️ 5. Voice Controls</div>
+
+  <div class="range">
+    <span>Speed</span>
+    <input
+      type="range"
+      id="speed"
+      min="0.6"
+      max="1.4"
+      step="0.05"
+      value="1"
+      oninput="speedOut.value=this.value+'x'"
+    >
+    <output id="speedOut">1x</output>
+  </div>
+
+  <div class="range">
+    <span>Volume</span>
+    <input
+      type="range"
+      id="volume"
+      min="0.4"
+      max="1.5"
+      step="0.05"
+      value="1"
+      oninput="volumeOut.value=Math.round(this.value*100)+'%'"
+    >
+    <output id="volumeOut">100%</output>
+  </div>
+
+  <button class="green" id="generateBtn" onclick="generateVoice()">
+    🔊 Generate Voice
+  </button>
+</section>
+
+
+<!-- RESULT -->
+<section class="card">
+  <div class="title">🎧 6. Result</div>
+
+  <div id="resultStatus" class="status warning">
+    अभी कोई audio तैयार नहीं है।
+  </div>
+
+  <audio id="player" controls></audio>
+
+  <button
+    id="downloadBtn"
+    class="purple"
+    style="display:none"
+    onclick="downloadAudio()"
+  >
+    ⬇️ WAV Download करें
+  </button>
+</section>
+
+
+<footer class="footer">
+  GBSBFORYOU AI Voice Engine V2<br>
+  Browser-based experimental AI system<br>
+  Use only your own voice or voices for which you have permission.
+</footer>
+
+</div>
+
+
+<script type="module">
+
+import {
+  pipeline
+} from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2";
+
+const MODEL = "Xenova/speecht5_tts";
+
+const EMBEDDING =
+"https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin";
+
+let synthesizer = null;
+let generatedAudio = null;
+let generatedRate = 16000;
+
+const $ = id => document.getElementById(id);
+
+
+/* -----------------------------
+   TEXT COUNTER
+----------------------------- */
+
+$("script").addEventListener("input",()=>{
+  $("count").textContent = $("script").value.length;
+});
+
+
+/* -----------------------------
+   LOAD ENGINE
+----------------------------- */
+
+window.loadEngine = async function(){
+
+  const btn = $("loadBtn");
+
+  btn.disabled = true;
+  btn.textContent = "⏳ Model loading...";
+
+  $("modelStatus").className = "status warning";
+  $("modelStatus").textContent =
+    "SpeechT5 model download हो रहा है। पहली बार समय लग सकता है।";
+
+  try{
+
+    synthesizer = await pipeline(
+      "text-to-speech",
+      MODEL,
+      {
+        dtype:"q8",
+        progress_callback:data => {
+
+          if(data && typeof data.progress === "number"){
+            $("progress").value = data.progress;
+          }
+
+          if(data && data.status){
+            $("modelStatus").textContent =
+              "Model: " + data.status;
+          }
+        }
+      }
+    );
+
+    $("progress").value = 100;
+
+    $("modelStatus").className = "status";
+    $("modelStatus").textContent =
+      "✅ AI Engine तैयार है। अब script generate कर सकते हैं।";
+
+    btn.textContent = "✅ AI Engine तैयार";
+
+  }catch(error){
+
+    console.error(error);
+
+    $("modelStatus").className = "status error";
+    $("modelStatus").textContent =
+      "Model load नहीं हुआ: " + error.message;
+
+    btn.disabled = false;
+    btn.textContent = "🔄 फिर कोशिश करें";
+  }
+};
+
+
+/* -----------------------------
+   VOICE PROFILE
+----------------------------- */
+
+window.saveVoiceProfile = async function(input){
+
+  const file = input.files[0];
+
+  if(!file) return;
+
+  if(file.size > 30 * 1024 * 1024){
+    alert("File 30 MB से छोटी रखें।");
+    return;
+  }
+
+  const profile = {
+    name:file.name,
+    size:file.size,
+    type:file.type,
+    time:new Date().toISOString()
+  };
+
+  try{
+
+    localStorage.setItem(
+      "gbsb_voice_profile",
+      JSON.stringify(profile)
+    );
+
+    $("profile").style.display="block";
+
+    $("profile").innerHTML =
+      "🎙️ <strong>"+escapeHTML(file.name)+"</strong><br>"+
+      "Size: "+formatSize(file.size)+"<br>"+
+      "Status: Local Voice Profile saved";
+
+  }catch(e){
+
+    console.error(e);
+
+    $("profile").style.display="block";
+
+    $("profile").textContent =
+      "Recording मिली, लेकिन browser storage में save नहीं हो सकी।";
+  }
+};
+
+
+window.clearProfile = function(){
+
+  localStorage.removeItem("gbsb_voice_profile");
+
+  $("profile").style.display="none";
+  $("voiceFile").value="";
+
+};
+
+
+/* -----------------------------
+   RESTORE PROFILE
+----------------------------- */
+
+const savedProfile =
+  localStorage.getItem("gbsb_voice_profile");
+
+if(savedProfile){
+
+  try{
+
+    const p = JSON.parse(savedProfile);
+
+    $("profile").style.display="block";
+
+    $("profile").innerHTML =
+      "🎙️ <strong>"+escapeHTML(p.name)+"</strong><br>"+
+      "Status: Saved Voice Profile";
+
+  }catch(e){}
+}
+
+
+/* -----------------------------
+   LANGUAGE
+----------------------------- */
+
+window.languageChanged = function(){
+
+  const lang = $("language").value;
+
+  const info = {
+    en:"English mode: SpeechT5 TTS सक्रिय है।",
+    hi:"हिन्दी mode: text तैयार रहेगा; वर्तमान SpeechT5 model English-oriented है।",
+    sa:"संस्कृत mode: Sanskrit text preparation active है; dedicated Sanskrit TTS V2.1 में जोड़ा जाएगा।",
+    gb:"गोर बोली mode: Gोर बोली text preparation active है; dedicated Gor Boli TTS engine बाद के चरण में जोड़ा जाएगा।"
+  };
+
+  $("languageInfo").textContent = info[lang];
+
+};
+
+
+/* -----------------------------
+   EXAMPLE
+----------------------------- */
+
+window.insertExample = function(){
+
+  const lang = $("language").value;
+
+  const examples = {
+
+    en:
+      "Namaste. Welcome to GBSBFORYOU AI Voice Engine. This is a browser based voice generation system.",
+
+    hi:
+      "नमस्कार। यह GBSBFORYOU AI Voice Engine है। हमारा उद्देश्य भारतीय भाषाओं के लिए सरल और सुलभ AI आवाज़ तकनीक विकसित करना है।",
+
+    sa:
+      "नमः। इदं GBSBFORYOU कृत्रिमबुद्धिमत्-स्वरप्रणाली अस्ति।",
+
+    gb:
+      "राम राम। यो GBSBFORYOU रो आवाज सिस्टम है।"
+  };
+
+  $("script").value = examples[lang];
+
+  $("count").textContent =
+    $("script").value.length;
+};
+
+
+/* -----------------------------
+   GENERATE
+----------------------------- */
+
+window.generateVoice = async function(){
+
+  if(!synthesizer){
+
+    alert("पहले AI Engine शुरू करें।");
+    return;
+  }
+
+  const text =
+    $("script").value.trim();
+
+  if(!text){
+
+    alert("पहले script लिखें।");
+    return;
+  }
+
+  if($("language").value !== "en"){
+
+    $("resultStatus").className =
+      "status warning";
+
+    $("resultStatus").textContent =
+      "वर्तमान V2 में वास्तविक SpeechT5 generation English mode में उपलब्ध है। Hindi/Sanskrit/Gor Boli multilingual engine V2.1 में जोड़ा जाएगा।";
+
+    return;
+  }
+
+  const btn = $("generateBtn");
+
+  btn.disabled=true;
+  btn.textContent="⏳ Voice generate हो रही है...";
+
+  $("resultStatus").className =
+    "status warning";
+
+  $("resultStatus").textContent =
+    "AI speech generate कर रहा है...";
+
+  try{
+
+    /*
+      SpeechT5 compatible speaker embedding.
+      V2.1 में इसे uploaded user's x-vector से replace करेंगे.
+    */
+
+    const result =
+      await synthesizer(
+        text,
+        {
+          speaker_embeddings:EMBEDDING
+        }
+      );
+
+    generatedAudio =
+      result.audio;
+
+    generatedRate =
+      result.sampling_rate || 16000;
+
+    const wav =
+      createWav(
+        generatedAudio,
+        generatedRate,
+        parseFloat($("volume").value)
+      );
+
+    const url =
+      URL.createObjectURL(wav);
+
+    $("player").src=url;
+
+    $("player").playbackRate =
+      parseFloat($("speed").value);
+
+    $("downloadBtn").style.display =
+      "block";
+
+    $("resultStatus").className =
+      "status";
+
+    $("resultStatus").textContent =
+      "✅ Voice तैयार है।";
+
+  }catch(error){
+
+    console.error(error);
+
+    $("resultStatus").className =
+      "status error";
+
+    $("resultStatus").textContent =
+      "Generation error: "+error.message;
+
+  }finally{
+
+    btn.disabled=false;
+    btn.textContent="🔊 Generate Voice";
+  }
+};
+
+
+/* -----------------------------
+   WAV ENCODER
+----------------------------- */
+
+function createWav(samples,sampleRate,volume){
+
+  const buffer =
+    new ArrayBuffer(44 + samples.length*2);
+
+  const view =
+    new DataView(buffer);
+
+  writeString(view,0,"RIFF");
+  view.setUint32(
+    4,
+    36 + samples.length*2,
+    true
+  );
+
+  writeString(view,8,"WAVE");
+  writeString(view,12,"fmt ");
+
+  view.setUint32(16,16,true);
+  view.setUint16(20,1,true);
+  view.setUint16(22,1,true);
+  view.setUint32(24,sampleRate,true);
+  view.setUint32(28,sampleRate*2,true);
+  view.setUint16(32,2,true);
+  view.setUint16(34,16,true);
+
+  writeString(view,36,"data");
+
+  view.setUint32(
+    40,
+    samples.length*2,
+    true
+  );
+
+  let offset=44;
+
+  for(let i=0;i<samples.length;i++){
+
+    let s =
+      samples[i] * volume;
+
+    s=Math.max(-1,Math.min(1,s));
+
+    view.setInt16(
+      offset,
+      s < 0 ? s*0x8000 : s*0x7fff,
+      true
+    );
+
+    offset+=2;
+  }
+
+  return new Blob(
+    [view],
+    {type:"audio/wav"}
+  );
+}
+
+
+function writeString(view,offset,string){
+
+  for(let i=0;i<string.length;i++){
+
+    view.setUint8(
+      offset+i,
+      string.charCodeAt(i)
+    );
+  }
+}
+
+
+/* -----------------------------
+   DOWNLOAD
+----------------------------- */
+
+window.downloadAudio=function(){
+
+  if(!generatedAudio){
+
+    alert("पहले audio generate करें।");
+    return;
+  }
+
+  const wav =
+    createWav(
+      generatedAudio,
+      generatedRate,
+      parseFloat($("volume").value)
+    );
+
+  const url =
+    URL.createObjectURL(wav);
+
+  const a =
+    document.createElement("a");
+
+  a.href=url;
+  a.download=
+    "GBSBFORYOU-AI-Voice.wav";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  setTimeout(
+    ()=>URL.revokeObjectURL(url),
+    2000
+  );
+};
+
+
+/* -----------------------------
+   HELPERS
+----------------------------- */
+
+function formatSize(bytes){
+
+  if(bytes < 1024)
+    return bytes+" B";
+
+  if(bytes < 1024*1024)
+    return (bytes/1024).toFixed(1)+" KB";
+
+  return (bytes/1024/1024).toFixed(1)+" MB";
+}
+
+
+function escapeHTML(text){
+
+  return text
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+</script>
+
+</body>
+                                             </html>
