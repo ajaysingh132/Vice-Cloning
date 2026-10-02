@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#07090f">
+
+<title>GBSBFORYOU AI Voice Engine V2.1</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:16px;
+  background:#07090f;
+  color:#e8edf5;
+  font-family:system-ui,"Noto Sans Devanagari",sans-serif;
+}
+
+.app{
+  max-width:620px;
+  margin:auto;
+}
+
+header{
+  text-align:center;
+  margin:8px 0 22px;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:20px;
+  background:#e8a00018;
+  border:1px solid #e8a00055;
+  color:#e8a000;
+  font-size:11px;
+}
+
+h1{
+  margin:10px 0 5px;
+  font-size:27px;
+}
+
+.sub{
+  color:#94a3b8;
+  font-size:12px;
+  line-height:1.7;
+}
+
+.card{
+  background:#ffffff08;
+  border:1px solid #ffffff14;
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:14px;
+}
+
+.title{
+  color:#e8a000;
+  font-weight:800;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  color:#94a3b8;
+  margin-top:10px;
+}
+
+input[type=text],
+input[type=url],
+textarea,
+select{
+  width:100%;
+  margin-top:7px;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ffffff18;
+  background:#ffffff09;
+  color:#fff;
+  font:inherit;
+}
+
+textarea{
+  min-height:180px;
+  resize:vertical;
+  line-height:1.75;
+}
+
+select option{
+  background:#151922;
+}
+
+button{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:11px;
+  margin-top:9px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.primary{
+  background:#e8a000;
+  color:#111;
+}
+
+.green{
+  background:#00bfa5;
+  color:#06110f;
+}
+
+.purple{
+  background:#8b5cf6;
+  color:#fff;
+}
+
+.dark{
+  background:#ffffff0d;
+  color:#cbd5e1;
+  border:1px solid #ffffff14;
+}
+
+.red{
+  background:#ef4444;
+  color:#fff;
+}
+
+.drop{
+  border:2px dashed #e8a00055;
+  padding:25px 12px;
+  border-radius:13px;
+  text-align:center;
+  color:#e8a000;
+  cursor:pointer;
+}
+
+.drop small{
+  display:block;
+  color:#64748b;
+  margin-top:6px;
+}
+
+.status{
+  padding:10px 12px;
+  border-radius:9px;
+  background:#00bfa512;
+  color:#00bfa5;
+  font-size:12px;
+  line-height:1.65;
+  margin-top:10px;
+}
+
+.warning{
+  background:#e8a00012;
+  color:#e8a000;
+}
+
+.error{
+  background:#ef444415;
+  color:#f87171;
+}
+
+.info{
+  background:#60a5fa12;
+  color:#93c5fd;
+}
+
+.profile{
+  display:none;
+  margin-top:10px;
+  padding:12px;
+  border-radius:10px;
+  background:#ffffff08;
+  font-size:12px;
+  color:#cbd5e1;
+  line-height:1.7;
+}
+
+.row{
+  display:flex;
+  gap:8px;
+}
+
+.row>*{
+  flex:1;
+}
+
+.range{
+  display:grid;
+  grid-template-columns:70px 1fr 48px;
+  align-items:center;
+  gap:8px;
+  margin:12px 0;
+  font-size:12px;
+  color:#94a3b8;
+}
+
+.range output{
+  text-align:right;
+  color:#e8a000;
+}
+
+progress{
+  width:100%;
+  height:8px;
+  margin-top:8px;
+}
+
+audio{
+  width:100%;
+  margin-top:12px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.endpoint{
+  font-size:11px;
+  color:#64748b;
+  line-height:1.6;
+  margin-top:7px;
+}
+
+.footer{
+  text-align:center;
+  color:#475569;
+  font-size:10px;
+  line-height:1.7;
+  padding:18px;
+}
+
+hr{
+  border:0;
+  border-top:1px solid #ffffff10;
+  margin:16px 0;
+}
+
+.check{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  font-size:11px;
+  color:#94a3b8;
+  line-height:1.5;
+  margin-top:12px;
+}
+
+.check input{
+  margin-top:2px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+
+  <div class="badge">
+    GBSBFORYOU · AI VOICE ENGINE V2.1
+  </div>
+
+  <h1>🎙️ Real Voice Clone Studio</h1>
+
+  <div class="sub">
+    Mobile First · Hindi Voice Workflow<br>
+    Reference Voice → Voice Clone Backend → Audio
+  </div>
+
+</header>
+
+
+<!-- ==================================================
+     1. BACKEND
+================================================== -->
+
+<section class="card">
+
+  <div class="title">
+    🔌 1. Voice Clone Backend
+  </div>
+
+  <label>
+    Backend API URL
+  </label>
+
+  <input
+    id="apiUrl"
+    type="url"
+    placeholder="https://your-vercel-domain.vercel.app/api/voice-clone"
+  >
+
+  <div class="endpoint">
+    Backend बाद में Vercel / XTTS-v2 server से जोड़ा जाएगा।
+    GitHub Pages केवल frontend है।
+  </div>
+
+  <button
+    class="dark"
+    onclick="saveBackend()"
+  >
+    💾 Backend URL सेव करें
+  </button>
+
+  <button
+    class="dark"
+    onclick="testBackend()"
+  >
+    🔎 Backend Connection Test
+  </button>
+
+  <div
+    id="backendStatus"
+    class="status warning"
+  >
+    Backend अभी configure नहीं किया गया है।
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     2. VOICE PROFILE
+================================================== -->
+
+<section class="card">
+
+  <div class="title">
+    🎙️ 2. Reference Voice
+  </div>
+
+  <div
+    class="drop"
+    onclick="document.getElementById('voiceFile').click()"
+  >
+
+    🎤 अपनी आवाज़ की recording चुनें
+
+    <small>
+      WAV / MP3 / M4A / OGG · बेहतर परिणाम के लिए 20–60 सेकंड
+    </small>
+
+  </div>
+
+  <input
+    id="voiceFile"
+    type="file"
+    accept="audio/*"
+    style="display:none"
+    onchange="selectVoice(this)"
+  >
+
+  <div
+    id="profile"
+    class="profile"
+  ></div>
+
+  <div
+    id="voiceAudioBox"
+    class="hidden"
+  >
+
+    <audio
+      id="voicePlayer"
+      controls
+    ></audio>
+
+  </div>
+
+  <button
+    class="dark"
+    onclick="clearVoice()"
+  >
+    🗑️ Reference Voice हटाएँ
+  </button>
+
+  <div class="status info">
+
+    आपकी recording को अभी server पर स्वतः upload नहीं किया जाता।
+    Generate दबाने पर ही selected reference voice backend को भेजी जाएगी।
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     3. VOICE IDENTITY
+================================================== -->
+
+<section class="card">
+
+  <div class="title">
+    👤 3. Voice Profile Identity
+  </div>
+
+  <label>
+    Voice Profile Name
+  </label>
+
+  <input
+    id="voiceName"
+    type="text"
+    value="Ajay Singh Chouhan — Professor Narrator"
+  >
+
+  <label>
+    Language
+  </label>
+
+  <select id="language">
+
+    <option value="hi">
+      🇮🇳 हिन्दी
+    </option>
+
+    <option value="en">
+      🇬🇧 English
+    </option>
+
+    <option value="sa">
+      🕉️ संस्कृत
+    </option>
+
+    <option value="gb">
+      🟠 गोर बोली
+    </option>
+
+  </select>
+
+</section>
+
+
+<!-- ==================================================
+     4. TEST SCRIPT
+================================================== -->
+
+<section class="card">
+
+  <div class="title">
+    📝 4. Voice Test Script
+  </div>
+
+  <label>
+    परीक्षण के लिए छोटा Hindi script
+  </label>
+
+  <textarea
+    id="script"
+    maxlength="2000"
+    placeholder="नमस्कार। मैं अजय सिंह चौहान हूँ। यह मेरी वास्तविक आवाज़ के आधार पर तैयार किया गया AI Voice Test है।"
+    oninput="updateCount()"
+  ></textarea>
+
+  <div
+    style="text-align:right;color:#64748b;font-size:10px;margin-top:5px"
+  >
+    <span id="count">0</span>/2000
+  </div>
+
+  <button
+    class="dark"
+    onclick="insertExample()"
+  >
+    ✨ Test Script डालें
+  </button>
+
+</section>
+
+
+<!-- ==================================================
+     5. VOICE CONTROLS
+================================================== -->
+
+<section class="card">
+
+  <div class="title">
+    🎚️ 5. Voice Controls
+  </div>
+
+  <div class="range">
+
+    <span>Speed</span>
+
+    <input
+      id="speed"
+      type="range"
+      min="0.75"
+      max="1.25"
+      step="0.05"
+      value="0.95"
+      oninput="speedOut.value=this.value+'x'"
+    >
+
+    <output id="speedOut">
+      0.95x
+    </output>
+
+  </div>
+
+
+  <div class="range">
+
+    <span>Volume</span>
+
+    <input
+      id="volume"
+      type="range"
+      min="0.5"
+      max="1.5"
+      step="0.05"
+      value="1"
+      oninput="volumeOut.value=Math.round(this.value*100)+'%'"
+    >
+
+    <output id="volumeOut">
+      100%
+    </output>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     6. GENERATE
+================================================== -->
+
+<section class="card">
+
+  <div class="title">
+    🧬 6. Real Voice Clone Test
+  </div>
+
+  <div class="status warning">
+
+    ⚠️ यह बटन तभी वास्तविक cloned voice बनाएगा जब
+    XTTS-v2 या compatible voice-cloning backend connected होगा।
+
+  </div>
+
+  <label class="check">
+
+    <input
+      id="permission"
+      type="checkbox"
+    >
+
+    <span>
+      मैं पुष्टि करता हूँ कि uploaded reference voice
+      मेरी अपनी आवाज़ है या मुझे उसका उपयोग करने की अनुमति है।
+    </span>
+
+  </label>
+
+  <button
+    id="generateBtn"
+    class="green"
+    onclick="generateVoice()"
+  >
+    🎙️ Generate My Voice
+  </button>
+
+  <progress
+    id="progress"
+    value="0"
+    max="100"
+  ></progress>
+
+  <div
+    id="generationStatus"
+    class="status warning"
+  >
+    अभी कोई generation शुरू नहीं हुई है।
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     7. RESULT
+================================================== -->
+
+<section
+  id="resultCard"
+  class="card hidden"
+>
+
+  <div class="title">
+    🎧 7. Generated Voice
+  </div>
+
+  <div
+    id="resultStatus"
+    class="status"
+  >
+    Audio तैयार है।
+  </div>
+
+  <audio
+    id="resultPlayer"
+    controls
+  ></audio>
+
+  <div class="row">
+
+    <button
+      class="purple"
+      onclick="downloadResult()"
+    >
+      ⬇️ WAV Download
+    </button>
+
+    <button
+      class="dark"
+      onclick="clearResult()"
+    >
+      ✕ Clear
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ==================================================
+     8. LONG FORM PREPARATION
+================================================== -->
+
+<section class="card">
+
+  <div class="title">
+    📚 8. Audiobook Mode
+  </div>
+
+  <div class="status info">
+
+    V2.1 का अगला चरण:
+    <br><br>
+    Book → Chapter → Section → Voice Generation →
+    Automatic Audio Join → Chapter WAV/MP3
+    <br><br>
+    अर्थपूर्ण paragraph और sentence boundaries को
+    बनाए रखते हुए लंबे chapters process किए जाएँगे।
+
+  </div>
+
+</section>
+
+
+<footer class="footer">
+
+  GBSBFORYOU AI Voice Engine V2.1<br>
+  Ajay Singh Chouhan — Professor Narrator<br><br>
+
+  Voice cloning should only be used with your own voice
+  or with appropriate permission.
+
+</footer>
+
+</div>
+
+
+<script>
+
+/* ==================================================
+   STATE
+================================================== */
+
+let selectedVoice = null;
+let generatedBlob = null;
+
+
+/* ==================================================
+   DOM HELPER
+================================================== */
+
+const $ = id => document.getElementById(id);
+
+
+/* ==================================================
+   INITIAL LOAD
+================================================== */
+
+(function(){
+
+  const savedURL =
+    localStorage.getItem("gbsb_voice_backend_url");
+
+  if(savedURL){
+    $("apiUrl").value = savedURL;
+    setBackendStatus(
+      "Backend URL saved है। Connection test करें।",
+      "info"
+    );
+  }
+
+  const savedName =
+    localStorage.getItem("gbsb_voice_name");
+
+  if(savedName){
+    $("voiceName").value = savedName;
+  }
+
+})();
+
+
+/* ==================================================
+   BACKEND URL
+================================================== */
+
+window.saveBackend = function(){
+
+  const url =
+    $("apiUrl").value.trim();
+
+  if(!url){
+    setBackendStatus(
+      "Backend URL खाली है।",
+      "error"
+    );
+    return;
+  }
+
+  try{
+    new URL(url);
+  }catch(e){
+    setBackendStatus(
+      "Backend URL सही नहीं है।",
+      "error"
+    );
+    return;
+  }
+
+  localStorage.setItem(
+    "gbsb_voice_backend_url",
+    url
+  );
+
+  localStorage.setItem(
+    "gbsb_voice_name",
+    $("voiceName").value.trim()
+  );
+
+  setBackendStatus(
+    "✅ Backend URL सुरक्षित हो गया है।",
+    "info"
+  );
+
+};
+
+
+function getBackend(){
+
+  return $("apiUrl")
+    .value
+    .trim()
+    .replace(/\/+$/,"");
+
+}
+
+
+function setBackendStatus(text,type){
+
+  const box =
+    $("backendStatus");
+
+  box.textContent = text;
+
+  box.className =
+    "status " +
+    (
+      type === "error"
+      ? "error"
+      :
+      type === "info"
+      ? "info"
+      :
+      "warning"
+    );
+
+}
+
+
+/* ==================================================
+   BACKEND CONNECTION TEST
+================================================== */
+
+window.testBackend = async function(){
+
+  const url = getBackend();
+
+  if(!url){
+
+    setBackendStatus(
+      "पहले Backend API URL डालें।",
+      "error"
+    );
+
+    return;
+  }
+
+  setBackendStatus(
+    "⏳ Backend connection check हो रहा है...",
+    "warning"
+  );
+
+  try{
+
+    /*
+      We use OPTIONS first.
+      Some backends may not support it.
+      In that case a GET request is attempted.
+    */
+
+    let response;
+
+    try{
+
+      response =
+        await fetch(
+          url,
+          {
+            method:"OPTIONS"
+          }
+        );
+
+    }catch(e){
+
+      response = null;
+
+    }
+
+    if(
+      response &&
+      (
+        response.ok ||
+        response.status === 204 ||
+        response.status === 405
+      )
+    ){
+
+      setBackendStatus(
+        "✅ Backend reachable है।",
+        "info"
+      );
+
+      return;
+
+    }
+
+    try{
+
+      response =
+        await fetch(
+          url,
+          {
+            method:"GET"
+          }
+        );
+
+    }catch(e){
+
+      throw new Error(
+        "Backend तक connection नहीं बन पाया।"
+      );
+
+    }
+
+    if(
+      response.ok ||
+      response.status === 405 ||
+      response.status === 404
+    ){
+
+      setBackendStatus(
+        "🟡 Server reachable है। अब API endpoint की पुष्टि करनी होगी।",
+        "warning"
+      );
+
+    }else{
+
+      throw new Error(
+        "HTTP "+response.status
+      );
+
+    }
+
+  }catch(error){
+
+    setBackendStatus(
+      "❌ Backend connection failed: "+
+      error.message,
+      "error"
+    );
+
+  }
+
+};
+
+
+/* ==================================================
+   VOICE FILE
+================================================== */
+
+window.selectVoice = function(input){
+
+  const file =
+    input.files[0];
+
+  if(!file) return;
+
+  const maxSize =
+    30 * 1024 * 1024;
+
+  if(file.size > maxSize){
+
+    alert(
+      "Voice recording 30 MB से छोटी रखें।"
+    );
+
+    input.value="";
+    return;
+
+  }
+
+  selectedVoice = file;
+
+  const url =
+    URL.createObjectURL(file);
+
+  $("voicePlayer").src = url;
+
+  $("voiceAudioBox")
+    .classList
+    .remove("hidden");
+
+  $("profile").style.display =
+    "block";
+
+  $("profile").innerHTML =
+   
