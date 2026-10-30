@@ -9,6 +9,7 @@ import torchaudio
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from starlette.background import BackgroundTask
 from chatterbox.mtl_tts import ChatterboxMultilingualTTS
 
 APP_VERSION = "0.1.0"
@@ -143,7 +144,7 @@ async def voice_clone(
             output_path,
             media_type="audio/wav",
             filename="gbsbforyou-voice-output.wav",
-            background=None,
+            background=BackgroundTask(os.remove, output_path),
         )
     except HTTPException:
         raise
